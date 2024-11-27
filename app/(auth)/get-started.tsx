@@ -1,5 +1,6 @@
 import { CustomButton } from "@/components/CustomButton";
-import { icons, images } from "@/constants";
+import { OAuth } from "@/components/OAuth";
+import { images } from "@/constants";
 import { Link, router } from "expo-router";
 import { ImageBackground, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -29,12 +30,9 @@ export default function GetStarted() {
               <Text className="text-white font-bold">Or</Text>
               <View className="h-[1px] flex-1 bg-dark-300" />
             </View>
-            <CustomButton
-              title="Login with Google"
-              iconLeft={icons.google}
-              variant="outline"
-              className="bg-dark-400"
-            />
+
+            <OAuth />
+
             <View className="flex flex-row gap-2 mt-2 justify-center">
               <Text className="text-white">Already have an account ?</Text>
               <Link href="/(auth)/sign-in">

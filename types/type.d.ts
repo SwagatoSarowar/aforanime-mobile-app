@@ -13,10 +13,26 @@ declare interface CustomButtonProps extends TouchableOpacityProps {
 }
 
 declare interface InputFieldProps extends TextInputProps {
-  label: string;
-  icon?: ImageSourcePropType;
-  containerStyle?: string;
-  labelStyle?: string;
-  iconStyle?: string;
-  inputStyle?: string;
+  label?: string;
+  iconLeft?: ImageSourcePropType;
+  iconRight?: ImageSourcePropType;
+  containerClass?: string;
+  labelClass?: string;
+  iconLeftClass?: string;
+  iconRightClass?: string;
+  inputClass?: string;
+}
+
+declare interface OTPInputFieldProps {
+  value: string | undefined;
+  setValue: Dispatch<SetStateAction<any>>;
+  cellCount?: number;
+}
+
+declare interface CardProps {
+  image?: string;
+  title?: string;
+  releaseYear?: string;
+  score?: string;
+  className?: string;
 }

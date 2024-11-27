@@ -1,16 +1,23 @@
 import backarrow from "../assets/icons/back-arrow.png";
+import calendar from "../assets/icons/calendar.png";
+import edit from "../assets/icons/edit.png";
 import email from "../assets/icons/email.png";
+import galleryedit from "../assets/icons/gallery-edit.png";
 import google from "../assets/icons/google.png";
 import home from "../assets/icons/home.png";
+import listcheck from "../assets/icons/list-check.png";
 import list from "../assets/icons/list.png";
 import lock from "../assets/icons/lock.png";
+import logout from "../assets/icons/logout.png";
 import person from "../assets/icons/person.png";
+import profile from "../assets/icons/profile.png";
 import search from "../assets/icons/search.png";
 import check from "../assets/images/check.png";
 import getstartedbg from "../assets/images/getstartedbg.png";
 import onboardingbg1 from "../assets/images/onboardingbg1.png";
 import onboardingbg2 from "../assets/images/onboardingbg2.png";
 import onboardingbg3 from "../assets/images/onboardingbg3.png";
+import placeholder from "../assets/images/placeholder.png";
 import signinbg from "../assets/images/signinbg.png";
 import signupbg from "../assets/images/signupbg.png";
 
@@ -22,6 +29,7 @@ export const images = {
   signupbg,
   signinbg,
   check,
+  placeholder,
 };
 
 export const icons = {
@@ -29,10 +37,16 @@ export const icons = {
   person,
   lock,
   list,
+  listcheck,
   home,
   search,
   email,
   backarrow,
+  profile,
+  edit,
+  galleryedit,
+  logout,
+  calendar,
 };
 
 export const onboardingContent = [

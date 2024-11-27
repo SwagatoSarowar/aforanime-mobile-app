@@ -13,11 +13,13 @@ import {
 
 export function InputField({
   label,
-  icon,
-  containerStyle,
-  labelStyle,
-  iconStyle,
-  inputStyle,
+  iconLeft,
+  iconRight,
+  containerClass,
+  labelClass,
+  iconLeftClass,
+  iconRightClass,
+  inputClass,
   ...props
 }: InputFieldProps) {
   const inputRef = useRef<TextInput>(null);
@@ -30,31 +32,39 @@ export function InputField({
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className="w-full my-2">
-          <Text
-            className={`text-lg text-white font-semibold mb-3 ${labelStyle}`}
-          >
-            {label}
-          </Text>
+          {label && (
+            <Text
+              className={`text-lg text-white font-semibold mb-3 ${labelClass}`}
+            >
+              {label}
+            </Text>
+          )}
           <View
             className={`flex flex-row justify-start items-center relative rounded-full bg-dark-400 border-2 border-dark-300 ${
               isInputFocused ? "border-primary" : ""
-            } ${containerStyle}`}
+            } ${containerClass}`}
           >
-            {icon && (
+            {iconLeft && (
               <Image
                 resizeMode="contain"
-                className={`h-6 w-6 ml-3 -mr-2 ${iconStyle}`}
-                source={icon}
+                className={`h-6 w-6 ml-3 -mr-2 ${iconLeftClass}`}
+                source={iconLeft}
               />
             )}
             <TextInput
               onFocus={() => setIsInputFocused(true)}
               onBlur={() => setIsInputFocused(false)}
               ref={inputRef}
-              style={{ color: "white" }}
-              className={`flex-grow rounded-full p-4 font-semibold placeholder:text-dark-300 ${inputStyle}`}
+              className={`flex-grow rounded-full p-4 text-white text-xl font-bold placeholder:text-dark-300 ${inputClass}`}
               {...props}
             />
+            {iconRight && (
+              <Image
+                resizeMode="contain"
+                className={`h-6 w-6 mr-4 ${iconRightClass}`}
+                source={iconRight}
+              />
+            )}
           </View>
         </View>
       </TouchableWithoutFeedback>

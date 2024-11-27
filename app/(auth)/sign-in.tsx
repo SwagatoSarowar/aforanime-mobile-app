@@ -1,11 +1,46 @@
 import { CustomButton } from "@/components/CustomButton";
 import { InputField } from "@/components/InputField";
+import { OAuth } from "@/components/OAuth";
 import { icons, images } from "@/constants";
-import { Link } from "expo-router";
-import React from "react";
+import { useAuth, useSignIn } from "@clerk/clerk-expo";
+import { Link, router } from "expo-router";
+import React, { useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 export default function SignIn() {
+  const { isLoaded, signIn, setActive } = useSignIn();
+  const [data, setData] = useState({ email: "", password: "" });
+  const { signOut } = useAuth();
+
+  const handleSigninPress = React.useCallback(async () => {
+    if (!isLoaded) {
+      return;
+    }
+
+    try {
+      const signInAttempt = await signIn.create({
+        identifier: data.email,
+        password: data.password,
+      });
+
+      if (signInAttempt.status === "complete") {
+        await setActive({ session: signInAttempt.createdSessionId });
+        Toast.show({
+          type: "success",
+          text1: "Login Complete.",
+          visibilityTime: 1500,
+          onHide: () => router.replace("/(root)/(tabs)/home"),
+        });
+      } else {
+        console.log(JSON.stringify(signInAttempt, null, 2));
+      }
+    } catch (err: any) {
+      console.log(JSON.stringify(err));
+      Toast.show({ type: "error", text1: err.errors[0].longMessage });
+    }
+  }, [isLoaded, data]);
+
   return (
     <ScrollView
       contentContainerClassName="pb-[40px]"
@@ -23,29 +58,34 @@ export default function SignIn() {
             <InputField
               label="Email"
               placeholder="Enter Email"
-              icon={icons.email}
+              iconLeft={icons.email}
+              value={data.email}
+              onChangeText={(value) =>
+                setData((cur) => ({ ...cur, email: value }))
+              }
             />
             <InputField
               label="Password"
               placeholder="Enter Password"
-              icon={icons.lock}
+              iconLeft={icons.lock}
+              value={data.password}
+              onChangeText={(value) =>
+                setData((cur) => ({ ...cur, password: value }))
+              }
               secureTextEntry
             />
           </View>
 
           <View className="flex gap-4">
-            <CustomButton title="Sign In" />
+            <CustomButton title="Sign In" onPress={handleSigninPress} />
             <View className="flex gap-4 flex-row items-center justify-between">
               <View className="h-[1px] flex-1 bg-dark-300" />
               <Text className="text-white font-bold">Or</Text>
               <View className="h-[1px] flex-1 bg-dark-300" />
             </View>
-            <CustomButton
-              title="Login with Google"
-              iconLeft={icons.google}
-              variant="outline"
-              className="bg-dark-400"
-            />
+
+            <OAuth />
+
             <View className="flex flex-row gap-2 mt-2 justify-center">
               <Text className="text-white">Don't have an account ?</Text>
               <Link href="/(auth)/sign-up">

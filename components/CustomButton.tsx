@@ -25,7 +25,7 @@ export function CustomButton({
   return (
     <TouchableOpacity
       {...props}
-      className={`w-full flex flex-row justify-center items-center gap-4 rounded-full p-4 ${getVariantStyle(
+      className={`w-full flex flex-row justify-center items-center gap-4 rounded-full p-4 disabled:opacity-60 ${getVariantStyle(
         variant
       )} ${className}`}
     >
