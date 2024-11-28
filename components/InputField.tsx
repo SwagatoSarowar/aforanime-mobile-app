@@ -13,13 +13,13 @@ import {
 
 export function InputField({
   label,
-  iconLeft,
-  iconRight,
-  containerClass,
-  labelClass,
-  iconLeftClass,
-  iconRightClass,
-  inputClass,
+  icon,
+  iconStyle,
+  iconSide = "left",
+  containerStyle,
+  labelStyle,
+  iconLeftStyle,
+  inputStyle,
   ...props
 }: InputFieldProps) {
   const inputRef = useRef<TextInput>(null);
@@ -34,35 +34,42 @@ export function InputField({
         <View className="w-full my-2">
           {label && (
             <Text
-              className={`text-lg text-white font-semibold mb-3 ${labelClass}`}
+              style={labelStyle}
+              className="text-lg text-white font-semibold mb-3"
             >
               {label}
             </Text>
           )}
           <View
+            style={containerStyle}
             className={`flex flex-row justify-start items-center relative rounded-full bg-dark-400 border-2 border-dark-300 ${
               isInputFocused ? "border-primary" : ""
-            } ${containerClass}`}
+            }`}
           >
-            {iconLeft && (
+            {icon && iconSide === "left" && (
               <Image
+                style={iconLeftStyle}
                 resizeMode="contain"
-                className={`h-6 w-6 ml-3 -mr-2 ${iconLeftClass}`}
-                source={iconLeft}
+                className="h-6 w-6 ml-3 -mr-2"
+                source={icon}
               />
             )}
             <TextInput
+              numberOfLines={1}
               onFocus={() => setIsInputFocused(true)}
               onBlur={() => setIsInputFocused(false)}
+              style={inputStyle}
               ref={inputRef}
-              className={`flex-grow rounded-full p-4 text-white text-xl font-bold placeholder:text-dark-300 ${inputClass}`}
+              placeholderTextColor="#55595D"
+              className="w-[90%] rounded-full p-4 text-white text-xl font-bold"
               {...props}
             />
-            {iconRight && (
+            {icon && iconSide === "right" && (
               <Image
+                style={iconLeftStyle}
                 resizeMode="contain"
-                className={`h-6 w-6 mr-4 ${iconRightClass}`}
-                source={iconRight}
+                className="h-6 w-6 -mr-2"
+                source={icon}
               />
             )}
           </View>

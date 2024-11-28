@@ -1,5 +1,11 @@
 import { CustomButtonProps } from "@/types/type";
-import { Image, Text, TouchableOpacity } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const getVariantStyle = function (variant: CustomButtonProps["variant"]) {
   switch (variant) {
@@ -19,6 +25,7 @@ export function CustomButton({
   iconLeft,
   iconRight,
   variant = "primary",
+  isLoading = false,
   className,
   ...props
 }: CustomButtonProps) {
@@ -29,9 +36,19 @@ export function CustomButton({
         variant
       )} ${className}`}
     >
-      {iconLeft && <Image source={iconLeft} />}
-      <Text className="text-white text-lg font-semibold">{title}</Text>
-      {iconRight && <Image source={iconRight} />}
+      {iconLeft && (
+        <Image className="h-6 w-6" resizeMode="contain" source={iconLeft} />
+      )}
+      <View className="h-8 justify-center">
+        {isLoading ? (
+          <ActivityIndicator color="white" size="large" />
+        ) : (
+          <Text className="text-white text-lg font-semibold">{title}</Text>
+        )}
+      </View>
+      {iconRight && (
+        <Image className="h-6 w-6" resizeMode="contain" source={iconRight} />
+      )}
     </TouchableOpacity>
   );
 }

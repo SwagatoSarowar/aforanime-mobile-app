@@ -3,8 +3,10 @@ import { InputField } from "@/components/InputField";
 import { OAuth } from "@/components/OAuth";
 import { OTPInputField } from "@/components/OTPInputField";
 import { icons, images } from "@/constants";
+import { db } from "@/lib/firebase";
 import { useSignUp } from "@clerk/clerk-expo";
 import { Link, router } from "expo-router";
+import { addDoc, collection } from "firebase/firestore";
 import React, { useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 import { ReactNativeModal } from "react-native-modal";
@@ -12,7 +14,6 @@ import Toast from "react-native-toast-message";
 
 export default function SignUp() {
   const { isLoaded, signUp, setActive } = useSignUp();
-
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -23,6 +24,10 @@ export default function SignUp() {
     isOpen: false,
     type: "input",
   });
+  const [pending, setPending] = useState({
+    signupPending: false,
+    verificationPedning: false,
+  });
 
   const handleSignupPress = async function () {
     if (!isLoaded) {
@@ -30,6 +35,7 @@ export default function SignUp() {
     }
 
     try {
+      setPending((cur) => ({ ...cur, signupPending: true }));
       await signUp.create({
         firstName: data.name,
         emailAddress: data.email,
@@ -44,6 +50,8 @@ export default function SignUp() {
     } catch (err: any) {
       console.log(JSON.stringify(err));
       Toast.show({ type: "error", text1: err.errors[0].longMessage });
+    } finally {
+      setPending((cur) => ({ ...cur, signupPending: false }));
     }
   };
 
@@ -53,19 +61,31 @@ export default function SignUp() {
     }
 
     try {
+      setPending((cur) => ({ ...cur, verificationPedning: true }));
       const completeSignUp = await signUp.attemptEmailAddressVerification({
         code,
       });
 
       if (completeSignUp.status === "complete") {
         await setActive({ session: completeSignUp.createdSessionId });
-        setModalStatus({ isOpen: true, type: "success" });
+        try {
+          await addDoc(collection(db, "users"), {
+            userId: completeSignUp.createdUserId,
+            firstName: data.name,
+            email: data.email,
+          });
+          setModalStatus({ isOpen: true, type: "success" });
+        } catch (err: any) {
+          console.log(err);
+        }
       } else {
         console.log(JSON.stringify(completeSignUp, null, 2));
       }
     } catch (err: any) {
       console.log(JSON.stringify(err));
       Toast.show({ type: "error", text1: err.errors[0].longMessage });
+    } finally {
+      setPending((cur) => ({ ...cur, verificationPedning: false }));
     }
   };
 
@@ -86,7 +106,7 @@ export default function SignUp() {
             <InputField
               label="Name"
               placeholder="Enter Name"
-              iconLeft={icons.person}
+              icon={icons.person}
               value={data.name}
               onChangeText={(value) =>
                 setData((cur) => ({ ...cur, name: value }))
@@ -95,7 +115,7 @@ export default function SignUp() {
             <InputField
               label="Email"
               placeholder="Enter Email"
-              iconLeft={icons.email}
+              icon={icons.email}
               value={data.email}
               onChangeText={(value) =>
                 setData((cur) => ({ ...cur, email: value }))
@@ -104,7 +124,7 @@ export default function SignUp() {
             <InputField
               label="Password"
               placeholder="Enter Password"
-              iconLeft={icons.lock}
+              icon={icons.lock}
               value={data.password}
               onChangeText={(value) =>
                 setData((cur) => ({ ...cur, password: value }))
@@ -114,7 +134,11 @@ export default function SignUp() {
           </View>
 
           <View className="flex gap-4">
-            <CustomButton title="Sign Up" onPress={handleSignupPress} />
+            <CustomButton
+              title="Sign Up"
+              isLoading={pending.signupPending}
+              onPress={handleSignupPress}
+            />
             <View className="flex gap-4 flex-row items-center justify-between">
               <View className="h-[1px] flex-1 bg-dark-300" />
               <Text className="text-white font-bold">Or</Text>
@@ -147,6 +171,7 @@ export default function SignUp() {
                   </Text>
                 </View>
                 <CustomButton
+                  isLoading={pending.verificationPedning}
                   variant="success"
                   title="Verify"
                   onPress={handleVerifyPress}

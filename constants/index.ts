@@ -12,6 +12,7 @@ import logout from "../assets/icons/logout.png";
 import person from "../assets/icons/person.png";
 import profile from "../assets/icons/profile.png";
 import search from "../assets/icons/search.png";
+import upload from "../assets/icons/upload.png";
 import check from "../assets/images/check.png";
 import getstartedbg from "../assets/images/getstartedbg.png";
 import onboardingbg1 from "../assets/images/onboardingbg1.png";
@@ -47,6 +48,7 @@ export const icons = {
   galleryedit,
   logout,
   calendar,
+  upload,
 };
 
 export const onboardingContent = [

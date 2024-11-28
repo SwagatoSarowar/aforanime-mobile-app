@@ -67,8 +67,8 @@ export default function Home() {
               </View>
               <View className="my-3">
                 <InputField
-                  iconLeft={icons.search}
-                  iconLeftClass="ml-4"
+                  icon={icons.search}
+                  iconLeftStyle={{ marginLeft: 16 }}
                   placeholder="Search for Anime"
                 />
               </View>

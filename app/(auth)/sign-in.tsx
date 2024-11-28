@@ -2,7 +2,7 @@ import { CustomButton } from "@/components/CustomButton";
 import { InputField } from "@/components/InputField";
 import { OAuth } from "@/components/OAuth";
 import { icons, images } from "@/constants";
-import { useAuth, useSignIn } from "@clerk/clerk-expo";
+import { useSignIn } from "@clerk/clerk-expo";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
@@ -10,8 +10,8 @@ import Toast from "react-native-toast-message";
 
 export default function SignIn() {
   const { isLoaded, signIn, setActive } = useSignIn();
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({ email: "", password: "" });
-  const { signOut } = useAuth();
 
   const handleSigninPress = React.useCallback(async () => {
     if (!isLoaded) {
@@ -19,6 +19,7 @@ export default function SignIn() {
     }
 
     try {
+      setIsLoading(true);
       const signInAttempt = await signIn.create({
         identifier: data.email,
         password: data.password,
@@ -38,6 +39,8 @@ export default function SignIn() {
     } catch (err: any) {
       console.log(JSON.stringify(err));
       Toast.show({ type: "error", text1: err.errors[0].longMessage });
+    } finally {
+      setIsLoading(false);
     }
   }, [isLoaded, data]);
 
@@ -58,7 +61,7 @@ export default function SignIn() {
             <InputField
               label="Email"
               placeholder="Enter Email"
-              iconLeft={icons.email}
+              icon={icons.email}
               value={data.email}
               onChangeText={(value) =>
                 setData((cur) => ({ ...cur, email: value }))
@@ -67,7 +70,7 @@ export default function SignIn() {
             <InputField
               label="Password"
               placeholder="Enter Password"
-              iconLeft={icons.lock}
+              icon={icons.lock}
               value={data.password}
               onChangeText={(value) =>
                 setData((cur) => ({ ...cur, password: value }))
@@ -77,7 +80,11 @@ export default function SignIn() {
           </View>
 
           <View className="flex gap-4">
-            <CustomButton title="Sign In" onPress={handleSigninPress} />
+            <CustomButton
+              title="Sign In"
+              onPress={handleSigninPress}
+              isLoading={isLoading}
+            />
             <View className="flex gap-4 flex-row items-center justify-between">
               <View className="h-[1px] flex-1 bg-dark-300" />
               <Text className="text-white font-bold">Or</Text>
