@@ -52,7 +52,7 @@ export default function Welcome() {
                 <Text className="text-center text-white font-bold text-[32px]">
                   {slide.title}
                 </Text>
-                <Text className="mt-10 text-center text-lg font-medium text-secondary">
+                <Text className="mt-10 text-center text-lg font-medium text-dark-100">
                   {slide.description}
                 </Text>
               </View>

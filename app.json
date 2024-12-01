@@ -7,8 +7,7 @@
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/splash.png",
-      "imageWidth": 200,
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#6741D9"
     },
     "scheme": "myapp",
@@ -21,7 +20,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.swagatosarowar.aforanime"
     },
     "web": {
       "bundler": "metro",
@@ -29,22 +33,13 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      [
-        "expo-font",
-        {
-          "fonts": [
-            "./assets/fonts/Robot-Regular.ttf"
-          ]
-        }
-      ],
       "expo-router",
       [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#fff",
+          "imageWidth": 200
         }
       ],
       [

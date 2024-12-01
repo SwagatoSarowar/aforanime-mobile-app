@@ -14,7 +14,7 @@ export default function GetStarted() {
             <Text className="text-center text-white font-bold text-[32px]">
               Let's get started
             </Text>
-            <Text className="mt-10 text-center text-lg font-medium text-secondary">
+            <Text className="mt-10 text-center text-lg font-medium text-dark-100">
               Your anime adventure begins here. Sign up or log in to start
               creating your watchlist today!
             </Text>

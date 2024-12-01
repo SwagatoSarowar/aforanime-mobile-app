@@ -7,6 +7,7 @@ import {
   Platform,
   Text,
   TextInput,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -18,8 +19,8 @@ export function InputField({
   iconSide = "left",
   containerStyle,
   labelStyle,
-  iconLeftStyle,
   inputStyle,
+  onIconPress,
   ...props
 }: InputFieldProps) {
   const inputRef = useRef<TextInput>(null);
@@ -47,12 +48,14 @@ export function InputField({
             }`}
           >
             {icon && iconSide === "left" && (
-              <Image
-                style={iconLeftStyle}
-                resizeMode="contain"
-                className="h-6 w-6 ml-3 -mr-2"
-                source={icon}
-              />
+              <TouchableOpacity onPress={onIconPress}>
+                <Image
+                  style={iconStyle}
+                  resizeMode="contain"
+                  className="h-6 w-6 ml-3 -mr-2"
+                  source={icon}
+                />
+              </TouchableOpacity>
             )}
             <TextInput
               numberOfLines={1}
@@ -65,12 +68,14 @@ export function InputField({
               {...props}
             />
             {icon && iconSide === "right" && (
-              <Image
-                style={iconLeftStyle}
-                resizeMode="contain"
-                className="h-6 w-6 -mr-2"
-                source={icon}
-              />
+              <TouchableOpacity onPress={onIconPress}>
+                <Image
+                  style={iconStyle}
+                  resizeMode="contain"
+                  className="h-6 w-6 -mr-2"
+                  source={icon}
+                />
+              </TouchableOpacity>
             )}
           </View>
         </View>

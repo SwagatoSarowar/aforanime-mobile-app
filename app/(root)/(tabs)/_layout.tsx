@@ -9,19 +9,19 @@ const _tabs = [
     icon: icons.home,
   },
   {
-    name: "watch-later",
-    title: "Watch Later",
-    icon: icons.list,
+    name: "discover",
+    title: "Discover",
+    icon: icons.compass,
   },
   {
-    name: "watched-list",
-    title: "Watched",
+    name: "(lists)",
+    title: "Lists",
     icon: icons.listcheck,
   },
   {
-    name: "profile",
-    title: "Profile",
-    icon: icons.profile,
+    name: "search/[query]",
+    title: "Search",
+    icon: icons.search2,
   },
 ];
 
@@ -33,8 +33,10 @@ const TabIcon = function ({
   focused: boolean;
 }) {
   return (
-    <View className="">
-      <View className={`p-4 rounded-full ${focused ? "bg-primary" : ""}`}>
+    <View>
+      <View
+        className={`p-4 rounded-full ${focused ? "bg-primary" : "opacity-50"}`}
+      >
         <Image source={source} className="w-6 h-6" resizeMode="contain" />
       </View>
     </View>

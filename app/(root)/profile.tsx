@@ -2,7 +2,8 @@ import { CustomButton } from "@/components/CustomButton";
 import { InputField } from "@/components/InputField";
 import { icons, images } from "@/constants";
 import { usePickImage } from "@/hooks/usePickImage";
-import { useUser } from "@clerk/clerk-expo";
+import { useAuth, useUser } from "@clerk/clerk-expo";
+import { router } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
@@ -15,16 +16,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import ReactNativeModal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 export default function Profile() {
   const { user } = useUser();
+  const { signOut } = useAuth();
   const { pickImage, image, setImage } = usePickImage();
   const [userInfo, setUserInfo] = useState({
     firstName: user?.firstName,
     lastName: user?.lastName,
   });
+  const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageUploadLoading, setImageUplaodLoading] = useState(false);
 
@@ -79,9 +83,21 @@ export default function Profile() {
         className="mx-6"
       >
         <View className="flex">
-          <Text className="text-white text-4xl mt-6 font-semibold">
-            Your Profile
-          </Text>
+          <View className="flex flex-row gap-x-2">
+            <TouchableOpacity
+              className="p-4 mt-4"
+              onPress={() => router.replace("/(root)/(tabs)/home")}
+            >
+              <Image
+                source={icons.backarrow}
+                className="h-6 w-6"
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <Text className="text-white self-center text-4xl leading-none mt-6 font-semibold">
+              Your Profile
+            </Text>
+          </View>
           <TouchableOpacity onPress={pickImage}>
             <View className="flex items-center my-8 self-center relative">
               <Image
@@ -160,7 +176,41 @@ export default function Profile() {
                 userInfo.lastName === user?.lastName)
             }
           />
+          <CustomButton
+            className="mt-6"
+            title="Log Out"
+            variant="danger"
+            onPress={() => setModalOpen(true)}
+          />
         </View>
+        <ReactNativeModal isVisible={modalOpen}>
+          <View className="min-h-[300px] bg-dark-400 rounded-xl">
+            <View className="flex items-center justify-center flex-1 mx-4 gap-6">
+              <Text className="text-3xl text-center text-white font-bold">
+                Are You Sure ?
+              </Text>
+              <View>
+                <Text className="text-lg text-white/70 my-3 text-center">
+                  You will be signed out of the app. Do you want to proceed ?
+                </Text>
+              </View>
+              <View className="flex flex-row gap-4">
+                <CustomButton
+                  className="flex-1"
+                  title="Yes"
+                  variant="danger"
+                  onPress={() => signOut()}
+                />
+                <CustomButton
+                  className="flex-1"
+                  title="Cancel"
+                  variant="success"
+                  onPress={() => setModalOpen(false)}
+                />
+              </View>
+            </View>
+          </View>
+        </ReactNativeModal>
       </ScrollView>
     </SafeAreaView>
   );

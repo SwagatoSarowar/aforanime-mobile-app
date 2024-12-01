@@ -21,10 +21,10 @@ declare interface InputFieldProps extends TextInputProps {
   label?: string;
   icon?: ImageSourcePropType;
   iconSide?: "left" | "right";
+  onIconPress?: () => void;
   iconStyle?: StyleProp<ImageStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   labelStyle?: StyleProp<TextStyle>;
-  iconLeftStyle?: StyleProp<ImageStyle>;
   inputStyle?: StyleProp<TextStyle>;
 }
 
@@ -40,4 +40,10 @@ declare interface CardProps {
   releaseYear?: string;
   score?: string;
   className?: string;
+}
+
+declare interface RatingProps {
+  defaultRating?: number;
+  onRating?: Dispatch<React.SetStateAction<number>>;
+  showInitialText?: boolean;
 }
