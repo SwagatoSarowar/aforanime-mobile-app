@@ -1,12 +1,17 @@
 import { icons } from "@/constants";
-import { getDuration, getYear } from "@/lib/utils";
+import { getDuration, getVariantStyle, getYear } from "@/lib/utils";
+import { CustomButtonProps, DetailsScreenProps } from "@/types/type";
+import { useUser } from "@clerk/clerk-expo";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
-import { useState } from "react";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   Image,
+  ImageSourcePropType,
+  Pressable,
   Text,
   TouchableOpacity,
   View,
@@ -31,8 +36,24 @@ const sWidth = Dimensions.get("screen").width;
 const imageWidth = sWidth;
 const imageHeight = 400;
 
-export function DetailsScreen({ data }: { data: any }) {
+export function DetailsScreen({
+  data,
+  rating: defaultRating,
+  onRating,
+  onAddToWatchLater,
+  onRemoveFromWatchLater,
+  isAddToWatchLaterLoading = false,
+  isRemoveFromWatchLaterLoading = false,
+  onAddToWatched,
+  onRemoveFromWatched,
+  isAddToWatchedLoading = false,
+  isRemoveFromWatchedLoading = false,
+  isAddToWatchedSuccess = false,
+  isInWatchLater = false,
+  isInWatched = false,
+}: DetailsScreenProps) {
   const {
+    title_english,
     title,
     images,
     score,
@@ -49,10 +70,12 @@ export function DetailsScreen({ data }: { data: any }) {
     producers,
     licensors,
     studios,
+    mal_id,
   } = data;
 
+  const { user } = useUser();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rating, setRating] = useState(0);
 
   const titleOpacity = useSharedValue(0);
   const titleTranslateX = useSharedValue(20);
@@ -105,19 +128,23 @@ export function DetailsScreen({ data }: { data: any }) {
     );
   });
 
+  useEffect(() => {
+    if (isAddToWatchedSuccess) setIsModalOpen(false);
+  }, [isAddToWatchedSuccess]);
+
   return (
     <>
       <View
         className="absolute bg-dark-500 z-50 rounded-full left-2"
         style={{ top: insets.top }}
       >
-        <Link href="/(root)/(tabs)/home" className="p-4">
+        <Pressable onPress={() => router.back()} className="p-4">
           <Image
             source={icons.backarrow}
             className="h-6 w-6"
             resizeMode="contain"
           />
-        </Link>
+        </Pressable>
       </View>
       <Animated.View
         style={[
@@ -149,7 +176,7 @@ export function DetailsScreen({ data }: { data: any }) {
             className="text-white text-2xl font-bold ml-14 mr-6"
             numberOfLines={1}
           >
-            {title}
+            {title_english || title}
           </Text>
         </Animated.View>
         <Animated.ScrollView
@@ -164,7 +191,7 @@ export function DetailsScreen({ data }: { data: any }) {
               className="text-white font-bold text-3xl mx-6 -translate-y-10"
               numberOfLines={1}
             >
-              {title}
+              {title_english || title}
             </Text>
             {/* ========================== SCORE AND RANKING =========================== */}
             <View className="mx-6">
@@ -206,30 +233,40 @@ export function DetailsScreen({ data }: { data: any }) {
             </View>
 
             {/* ========================== ACTION BUTTONS =========================== */}
-            <View className="flex items-center gap-4 py-4 bg-dark-500">
-              <TouchableOpacity className="bg-primary px-4 py-3 rounded-xl flex flex-row items-center gap-3">
-                <Image
-                  source={icons.add}
-                  resizeMode="contain"
-                  className="h-6 w-6"
+            <View className="flex items-center gap-4 py-4 bg-dark-500 mx-6">
+              {isInWatchLater ? (
+                <ActionButton
+                  title="Remove From Watch Later"
+                  icon={icons.trash}
+                  onPress={onRemoveFromWatchLater}
+                  variant="danger"
+                  isLoading={isRemoveFromWatchLaterLoading}
                 />
-                <Text className="text-white text-lg font-semibold">
-                  Add To Watch Later
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setIsModalOpen(true)}
-                className="bg-success px-4 py-3 rounded-xl flex flex-row items-center gap-3"
-              >
-                <Image
-                  source={icons.heart}
-                  resizeMode="contain"
-                  className="h-6 w-6"
+              ) : (
+                <ActionButton
+                  title="Add To Watch Later"
+                  icon={icons.add}
+                  onPress={onAddToWatchLater}
+                  isLoading={isAddToWatchLaterLoading}
                 />
-                <Text className="text-white text-lg font-semibold">
-                  Add To Watched List
-                </Text>
-              </TouchableOpacity>
+              )}
+
+              {isInWatched ? (
+                <ActionButton
+                  title="Remove From Watched"
+                  icon={icons.trash}
+                  onPress={onRemoveFromWatched}
+                  variant="danger"
+                  isLoading={isRemoveFromWatchedLoading}
+                />
+              ) : (
+                <ActionButton
+                  title="Add To Watched List"
+                  icon={icons.heart}
+                  onPress={() => setIsModalOpen(true)}
+                  variant="success"
+                />
+              )}
             </View>
 
             {/* ========================== TYPE, STATUS, EPISODE AND PGR =========================== */}
@@ -321,17 +358,19 @@ export function DetailsScreen({ data }: { data: any }) {
                   <Text className="text-white text-center my-6 text-xl capitalize font-semibold">
                     Give{" "}
                     <Text className="text-warning italic font-bold normal-case">
-                      {title}
+                      "{title_english || title}"
                     </Text>{" "}
                     your personal rating.
                   </Text>
-                  <Rating onRating={setRating} />
+                  <Rating defaultRating={defaultRating} onRating={onRating} />
                 </View>
                 <View className="flex flex-row gap-4">
                   <CustomButton
                     className="flex-1"
                     title="Rate"
                     variant="success"
+                    onPress={onAddToWatched}
+                    isLoading={isAddToWatchedLoading}
                   />
                   <CustomButton
                     className="flex-1"
@@ -348,3 +387,39 @@ export function DetailsScreen({ data }: { data: any }) {
     </>
   );
 }
+
+const ActionButton = function ({
+  variant,
+  title,
+  icon,
+  isLoading = false,
+  onPress,
+}: {
+  variant?: CustomButtonProps["variant"];
+  title: string;
+  icon?: ImageSourcePropType;
+  isLoading?: boolean;
+  onPress?: () => void;
+}) {
+  return (
+    <TouchableOpacity
+      className={`${getVariantStyle(variant)} px-4 py-3 rounded-xl`}
+      onPress={onPress}
+    >
+      {isLoading && (
+        <View className="absolute inset-0 items-center justify-center">
+          <ActivityIndicator color="white" />
+        </View>
+      )}
+      <View
+        style={{ opacity: isLoading ? 0 : 1 }}
+        className="flex flex-row items-center gap-3"
+      >
+        <Image source={icon} resizeMode="contain" className="h-6 w-6" />
+        <Text className="text-white text-lg font-semibold text-center">
+          {title}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+};

@@ -1,23 +1,34 @@
 import { Card } from "@/components/Card";
 import { InputField } from "@/components/InputField";
 import { TopRatedList } from "@/components/TopRatedList";
-import { icons } from "@/constants";
+import { apiBaseUrl, icons } from "@/constants";
 import { useFetch } from "@/hooks/useFetch";
 import { useInfiniteFetch } from "@/hooks/useInfiniteFetch";
 import { useUser } from "@clerk/clerk-expo";
 import { Link, router } from "expo-router";
 import { useState } from "react";
-import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  View,
+  ViewToken,
+} from "react-native";
+import { useSharedValue } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
   const { user } = useUser();
   const [query, setQuery] = useState("");
 
-  const { data, refetch, fetchNextPage, hasNextPage, isFetching } =
-    useInfiniteFetch("https://api.jikan.moe/v4/seasons/now");
+  const viewableItems = useSharedValue<ViewToken[]>([]);
+
+  const { data, refetch, fetchNextPage, hasNextPage } = useInfiniteFetch(
+    `${apiBaseUrl}/seasons/now`
+  );
   const { data: topRatedAnime, isPending } = useFetch(
-    "https://api.jikan.moe/v4/top/anime?page=1&limit=10"
+    `${apiBaseUrl}/top/anime?page=1&limit=10`
   );
   const flattenData =
     data?.pages.reduce((acc, page) => acc.concat(page.data), []) || [];
@@ -32,9 +43,15 @@ export default function Home() {
     <SafeAreaView className="flex-1 bg-dark-500">
       <View className="mt-4">
         <FlatList
+          contentContainerClassName="pb-14"
+          initialNumToRender={10}
+          scrollEventThrottle={32}
+          onViewableItemsChanged={(info) => {
+            viewableItems.value = info.viewableItems;
+          }}
           showsVerticalScrollIndicator={false}
           data={flattenData}
-          keyExtractor={(item) => item.mal_id}
+          keyExtractor={(item) => `main-list${item?.mal_id}`}
           onEndReached={() => hasNextPage && fetchNextPage()}
           renderItem={({ item }) => (
             <View className="mb-3 mx-6">
@@ -44,6 +61,8 @@ export default function Home() {
                   title={item?.title_english || item.title}
                   releaseYear={item?.aired?.from?.split("-")[0] || "N/A"}
                   score={item?.score}
+                  id={item?.mal_id}
+                  viewableItems={viewableItems}
                 />
               </Link>
             </View>

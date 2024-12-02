@@ -4,7 +4,8 @@ import axios, { AxiosRequestConfig } from "axios";
 export function useInfiniteFetch(
   url: string,
   limit: number = 10,
-  options?: AxiosRequestConfig
+  options?: AxiosRequestConfig,
+  seperator: "?" | "&" = "?"
 ) {
   const {
     data,
@@ -17,9 +18,12 @@ export function useInfiniteFetch(
   } = useInfiniteQuery({
     queryKey: [url],
     queryFn: async ({ pageParam }) => {
-      const res = await axios.get(`${url}?limit=${limit}&page=${pageParam}`, {
-        ...options,
-      });
+      const res = await axios.get(
+        `${url}${seperator}limit=${limit}&page=${pageParam}`,
+        {
+          ...options,
+        }
+      );
       return res.data;
     },
     initialPageParam: 1,

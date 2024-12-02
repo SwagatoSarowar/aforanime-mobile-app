@@ -58,6 +58,7 @@ export function InputField({
               </TouchableOpacity>
             )}
             <TextInput
+              keyboardAppearance="dark"
               numberOfLines={1}
               onFocus={() => setIsInputFocused(true)}
               onBlur={() => setIsInputFocused(false)}

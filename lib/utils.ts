@@ -1,3 +1,5 @@
+import { CustomButtonProps } from "@/types/type";
+
 export const getYear = function (yearString: string) {
   return yearString?.split("-")[0];
 };
@@ -18,4 +20,19 @@ export const formatNumberWithCommas = function (number: number | string) {
   }
 
   return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+export const getVariantStyle = function (
+  variant: CustomButtonProps["variant"]
+) {
+  switch (variant) {
+    case "danger":
+      return "bg-danger";
+    case "success":
+      return "bg-success";
+    case "outline":
+      return "border-2 border-white/50";
+    default:
+      return "bg-primary";
+  }
 };

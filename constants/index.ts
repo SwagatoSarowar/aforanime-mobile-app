@@ -12,6 +12,7 @@ import listcheck from "../assets/icons/list-check.png";
 import list from "../assets/icons/list.png";
 import lock from "../assets/icons/lock.png";
 import logout from "../assets/icons/logout.png";
+import notfound from "../assets/icons/notfound.png";
 import person from "../assets/icons/person.png";
 import profile from "../assets/icons/profile.png";
 import search2 from "../assets/icons/search-2.png";
@@ -38,6 +39,7 @@ import star4ball from "../assets/images/star4ball.png";
 import star5ball from "../assets/images/star5ball.png";
 import star6ball from "../assets/images/star6ball.png";
 import star7ball from "../assets/images/star7ball.png";
+import trash from "../assets/icons/trash.png";
 
 export const images = {
   onboardingbg1,
@@ -83,7 +85,11 @@ export const icons = {
   compass,
   add,
   heart,
+  notfound,
+  trash,
 };
+
+export const apiBaseUrl = "https://api.jikan.moe/v4";
 
 export const onboardingContent = [
   {

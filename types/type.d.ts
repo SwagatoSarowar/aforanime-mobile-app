@@ -1,3 +1,4 @@
+import { SetStateAction } from "react";
 import {
   ImageSourcePropType,
   ImageStyle,
@@ -6,7 +7,9 @@ import {
   TextStyle,
   TouchableOpacityProps,
   ViewStyle,
+  ViewToken,
 } from "react-native";
+import { SharedValue } from "react-native-reanimated";
 
 declare interface CustomButtonProps extends TouchableOpacityProps {
   title: string;
@@ -40,10 +43,30 @@ declare interface CardProps {
   releaseYear?: string;
   score?: string;
   className?: string;
+  viewableItems?: SharedValue<ViewToken[]>;
+  id?: string | number;
 }
 
 declare interface RatingProps {
   defaultRating?: number;
   onRating?: Dispatch<React.SetStateAction<number>>;
   showInitialText?: boolean;
+}
+
+declare interface DetailsScreenProps {
+  data: any;
+  rating?: number;
+  onRating?: Dispatch<SetStateAction<number>>;
+  onAddToWatchLater?: () => void;
+  onRemoveFromWatchLater?: () => void;
+  isAddToWatchLaterLoading?: boolean;
+  isRemoveFromWatchLaterLoading?: boolean;
+  isAddToWatchLaterSuccess?: boolean;
+  onAddToWatched?: () => void;
+  onRemoveFromWatched?: () => void;
+  isAddToWatchedLoading?: boolean;
+  isRemoveFromWatchedLoading?: boolean;
+  isAddToWatchedSuccess?: boolean;
+  isInWatched?: boolean;
+  isInWatchLater?: boolean;
 }

@@ -1,3 +1,4 @@
+import { getVariantStyle } from "@/lib/utils";
 import { CustomButtonProps } from "@/types/type";
 import {
   ActivityIndicator,
@@ -6,19 +7,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-const getVariantStyle = function (variant: CustomButtonProps["variant"]) {
-  switch (variant) {
-    case "danger":
-      return "bg-danger";
-    case "success":
-      return "bg-success";
-    case "outline":
-      return "border-2 border-white/50";
-    default:
-      return "bg-primary";
-  }
-};
 
 export function CustomButton({
   title,

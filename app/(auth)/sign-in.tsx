@@ -60,6 +60,7 @@ export default function SignIn() {
           <View className="mb-8">
             <InputField
               label="Email"
+              keyboardType="email-address"
               placeholder="Enter Email"
               icon={icons.email}
               value={data.email}
