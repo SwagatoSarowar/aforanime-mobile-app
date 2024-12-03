@@ -1,7 +1,7 @@
-import { icons } from "@/constants";
+import { apiBaseUrl, icons } from "@/constants";
+import { useFetch } from "@/hooks/useFetch";
 import { getDuration, getVariantStyle, getYear } from "@/lib/utils";
 import { CustomButtonProps, DetailsScreenProps } from "@/types/type";
-import { useUser } from "@clerk/clerk-expo";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -73,7 +73,9 @@ export function DetailsScreen({
     mal_id,
   } = data;
 
-  const { user } = useUser();
+  const { data: pictures, isPending } = useFetch(
+    `${apiBaseUrl}/anime/${mal_id}/pictures`
+  );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -138,7 +140,16 @@ export function DetailsScreen({
         className="absolute bg-dark-500 z-50 rounded-full left-2"
         style={{ top: insets.top }}
       >
-        <Pressable onPress={() => router.back()} className="p-4">
+        <Pressable
+          onPress={() => {
+            if (router.canGoBack()) {
+              router.back();
+            } else {
+              router.replace("/(root)/(tabs)/home");
+            }
+          }}
+          className="p-4"
+        >
           <Image
             source={icons.backarrow}
             className="h-6 w-6"
@@ -305,6 +316,35 @@ export function DetailsScreen({
               </View>
             </View>
 
+            {/* ========================== IMAGES =========================== */}
+            <View className="mb-4">
+              <View className="mx-6">
+                <Text className="text-dark-100 text-2xl font-bold mb-2 text-center">
+                  Images
+                </Text>
+                {isPending ? (
+                  <View className="flex-1 h-[300px] items-center justify-center">
+                    <ActivityIndicator size="large" color="lightblue" />
+                  </View>
+                ) : (
+                  <FlatList
+                    keyExtractor={(item) => item.jpg.image_url}
+                    data={pictures.data}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item }) => (
+                      <View className="bg-dark-400 p-[10px] rounded-md mr-3">
+                        <Image
+                          className="w-[160px] h-[280px] rounded-md"
+                          source={{ uri: item?.webp?.image_url }}
+                        />
+                      </View>
+                    )}
+                  />
+                )}
+              </View>
+            </View>
+
             {/* ========================== SYNOPSIS =========================== */}
             <View className="bg-dark-400 mb-2">
               <View className="mx-6 py-4">
@@ -316,39 +356,39 @@ export function DetailsScreen({
                 </Text>
               </View>
             </View>
-          </View>
-          {/* ====================== PRODUCERS, LICENSORS AND STUDIOS ================= */}
 
-          {producers.length > 0 && (
-            <View className="bg-dark-500 py-2 mx-6">
-              <Text className="text-dark-100 font-bold text-xl mb-1">
-                Producers:
-              </Text>
-              <Text className="text-white italic text-base">
-                {producers?.map((p: any) => p?.name).join(", ")}
-              </Text>
-            </View>
-          )}
-          {licensors.length > 0 && (
-            <View className="bg-dark-500 py-2 mx-6">
-              <Text className="text-dark-100 font-bold text-xl mb-1">
-                Licensors:
-              </Text>
-              <Text className="text-white italic text-base">
-                {licensors?.map((p: any) => p?.name).join(", ")}
-              </Text>
-            </View>
-          )}
-          {studios.length > 0 && (
-            <View className="bg-dark-500 py-2 mx-6">
-              <Text className="text-dark-100 font-bold text-xl mb-1">
-                Studios:
-              </Text>
-              <Text className="text-white italic text-base">
-                {studios?.map((p: any) => p?.name).join(", ")}
-              </Text>
-            </View>
-          )}
+            {/* ====================== PRODUCERS, LICENSORS AND STUDIOS ================= */}
+            {producers.length > 0 && (
+              <View className="bg-dark-500 py-2 mx-6">
+                <Text className="text-dark-100 font-bold text-xl mb-1">
+                  Producers:
+                </Text>
+                <Text className="text-white italic text-base">
+                  {producers?.map((p: any) => p?.name).join(", ")}
+                </Text>
+              </View>
+            )}
+            {licensors.length > 0 && (
+              <View className="bg-dark-500 py-2 mx-6">
+                <Text className="text-dark-100 font-bold text-xl mb-1">
+                  Licensors:
+                </Text>
+                <Text className="text-white italic text-base">
+                  {licensors?.map((p: any) => p?.name).join(", ")}
+                </Text>
+              </View>
+            )}
+            {studios.length > 0 && (
+              <View className="bg-dark-500 py-2 mx-6">
+                <Text className="text-dark-100 font-bold text-xl mb-1">
+                  Studios:
+                </Text>
+                <Text className="text-white italic text-base">
+                  {studios?.map((p: any) => p?.name).join(", ")}
+                </Text>
+              </View>
+            )}
+          </View>
 
           {/* ====================== RATING MODAL ================= */}
           <ReactNativeModal isVisible={isModalOpen}>

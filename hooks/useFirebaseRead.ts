@@ -37,7 +37,7 @@ export function useFirebaseRead(path: string) {
 
   useEffect(() => {
     read();
-  }, [db, path]);
+  }, [db, path, setIsSuccess, setIsLoading, setError, setData, setItemsId]);
 
   const refetch = function () {
     read();

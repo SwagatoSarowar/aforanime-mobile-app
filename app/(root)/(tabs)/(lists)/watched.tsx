@@ -2,7 +2,9 @@ import { Card } from "@/components/Card";
 import { icons } from "@/constants";
 import { useFirebaseRead } from "@/hooks/useFirebaseRead";
 import { useUser } from "@clerk/clerk-expo";
+import { useIsFocused } from "@react-navigation/native";
 import { Link } from "expo-router";
+import { useEffect } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -13,8 +15,15 @@ import {
 } from "react-native";
 
 export default function Watched() {
+  const isFocused = useIsFocused();
   const { user } = useUser();
-  const { data, isLoading } = useFirebaseRead(`users/${user!.id}/watched`);
+  const { data, refetch, isLoading } = useFirebaseRead(
+    `users/${user!.id}/watched`
+  );
+
+  useEffect(() => {
+    refetch();
+  }, [isFocused]);
 
   return (
     <View className="flex-1 bg-dark-500">
@@ -24,10 +33,12 @@ export default function Watched() {
         </View>
       ) : (
         <FlatList
+          onRefresh={refetch}
+          refreshing={isLoading}
           contentContainerClassName="pb-[50px] mx-6"
           showsVerticalScrollIndicator={false}
-          data={data.length}
-          keyExtractor={(item) => item.mal_id}
+          data={data}
+          keyExtractor={(item: any) => item.mal_id}
           ListHeaderComponent={() => (
             <View className="my-6 bg-dark-400 rounded-xl shadow-md shadow-black">
               <Text

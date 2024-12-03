@@ -2,7 +2,9 @@ import { Card } from "@/components/Card";
 import { icons } from "@/constants";
 import { useFirebaseRead } from "@/hooks/useFirebaseRead";
 import { useUser } from "@clerk/clerk-expo";
+import { useIsFocused } from "@react-navigation/native";
 import { Link } from "expo-router";
+import { useEffect } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -13,8 +15,15 @@ import {
 } from "react-native";
 
 export default function Watchlater() {
+  const isFocused = useIsFocused();
   const { user } = useUser();
-  const { data, isLoading } = useFirebaseRead(`users/${user!.id}/watch_later`);
+  const { data, refetch, isLoading } = useFirebaseRead(
+    `users/${user!.id}/watch_later`
+  );
+
+  useEffect(() => {
+    refetch();
+  }, [isFocused]);
 
   return (
     <View className="flex-1 bg-dark-500">
@@ -24,6 +33,8 @@ export default function Watchlater() {
         </View>
       ) : (
         <FlatList
+          refreshing={isLoading}
+          onRefresh={refetch}
           contentContainerClassName="pb-[50px] mx-6"
           showsVerticalScrollIndicator={false}
           data={data}
