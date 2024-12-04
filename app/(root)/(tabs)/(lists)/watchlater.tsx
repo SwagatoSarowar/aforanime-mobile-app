@@ -68,9 +68,9 @@ export default function Watchlater() {
             >
               <View className="flex items-center gap-y-4">
                 <Image
-                  source={icons.notfound}
+                  source={icons.empty}
                   resizeMode="contain"
-                  className="h-16 w-16 opacity-30"
+                  className="h-20 w-20 opacity-30"
                 />
                 <Text className="text-dark-300 text-xl font-bold text-center">
                   You dont have any anime to wath later.

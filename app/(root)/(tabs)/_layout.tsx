@@ -9,11 +9,6 @@ const _tabs = [
     icon: icons.home,
   },
   {
-    name: "discover",
-    title: "Discover",
-    icon: icons.compass,
-  },
-  {
     name: "(lists)",
     title: "Lists",
     icon: icons.listcheck,
@@ -22,6 +17,11 @@ const _tabs = [
     name: "search/[query]",
     title: "Search",
     icon: icons.search2,
+  },
+  {
+    name: "profile",
+    title: "Profile",
+    icon: icons.profile,
   },
 ];
 

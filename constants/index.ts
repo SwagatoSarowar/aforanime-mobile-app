@@ -4,6 +4,7 @@ import calendar from "../assets/icons/calendar.png";
 import compass from "../assets/icons/compass.png";
 import edit from "../assets/icons/edit.png";
 import email from "../assets/icons/email.png";
+import empty from "../assets/icons/empty.png";
 import galleryedit from "../assets/icons/gallery-edit.png";
 import google from "../assets/icons/google.png";
 import heart from "../assets/icons/heart.png";
@@ -17,6 +18,7 @@ import person from "../assets/icons/person.png";
 import profile from "../assets/icons/profile.png";
 import search2 from "../assets/icons/search-2.png";
 import search from "../assets/icons/search.png";
+import trash from "../assets/icons/trash.png";
 import upload from "../assets/icons/upload.png";
 import check from "../assets/images/check.png";
 import dragonballgroupsilhouette from "../assets/images/dragon-ball-group-silhouette.png";
@@ -39,7 +41,6 @@ import star4ball from "../assets/images/star4ball.png";
 import star5ball from "../assets/images/star5ball.png";
 import star6ball from "../assets/images/star6ball.png";
 import star7ball from "../assets/images/star7ball.png";
-import trash from "../assets/icons/trash.png";
 
 export const images = {
   onboardingbg1,
@@ -87,6 +88,7 @@ export const icons = {
   heart,
   notfound,
   trash,
+  empty,
 };
 
 export const apiBaseUrl = "https://api.jikan.moe/v4";

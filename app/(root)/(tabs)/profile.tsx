@@ -1,5 +1,6 @@
 import { CustomButton } from "@/components/CustomButton";
 import { InputField } from "@/components/InputField";
+import { LogoutModal } from "@/components/LogoutModal";
 import { icons, images } from "@/constants";
 import { usePickImage } from "@/hooks/usePickImage";
 import { useAuth, useUser } from "@clerk/clerk-expo";
@@ -16,7 +17,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ReactNativeModal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
@@ -183,34 +183,8 @@ export default function Profile() {
             onPress={() => setModalOpen(true)}
           />
         </View>
-        <ReactNativeModal isVisible={modalOpen}>
-          <View className="min-h-[300px] bg-dark-400 rounded-xl">
-            <View className="flex items-center justify-center flex-1 mx-4 gap-6">
-              <Text className="text-3xl text-center text-white font-bold">
-                Are You Sure ?
-              </Text>
-              <View>
-                <Text className="text-lg text-white/70 my-3 text-center">
-                  You will be signed out of the app. Do you want to proceed ?
-                </Text>
-              </View>
-              <View className="flex flex-row gap-4">
-                <CustomButton
-                  className="flex-1"
-                  title="Yes"
-                  variant="danger"
-                  onPress={() => signOut()}
-                />
-                <CustomButton
-                  className="flex-1"
-                  title="Cancel"
-                  variant="success"
-                  onPress={() => setModalOpen(false)}
-                />
-              </View>
-            </View>
-          </View>
-        </ReactNativeModal>
+
+        <LogoutModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
       </ScrollView>
     </SafeAreaView>
   );
