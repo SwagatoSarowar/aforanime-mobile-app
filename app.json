@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "aforanime",
-    "slug": "aforanime",
+    "slug": "a-for-anime",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -22,7 +22,6 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "android.permission.RECORD_AUDIO",
         "android.permission.RECORD_AUDIO"
       ],
       "package": "com.swagatosarowar.aforanime"
@@ -51,6 +50,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "a2a6d891-f5a9-4fde-8f09-79a326f7505b"
+      }
+    },
+    "owner": "swagatosarowar"
   }
 }
