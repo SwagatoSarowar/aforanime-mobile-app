@@ -17,6 +17,6 @@ module.exports = {
       },
     },
   },
-  safelist: ["bg-primary", "bg-danger", "bg-success"],
+  safelist: ["bg-primary", "bg-danger", "bg-success", "border-white/30"],
   plugins: [],
 };

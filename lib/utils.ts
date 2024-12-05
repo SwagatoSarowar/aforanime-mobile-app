@@ -31,7 +31,7 @@ export const getVariantStyle = function (
     case "success":
       return "bg-success";
     case "outline":
-      return "border-2 border-white/50";
+      return "border-2 border-white/30";
     default:
       return "bg-primary";
   }
